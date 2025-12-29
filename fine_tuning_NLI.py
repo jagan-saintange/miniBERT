@@ -44,8 +44,10 @@ model = CamembertForSequenceClassification.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="./camembert-xnli",
-    eval_strategy="epoch",
-    save_strategy="epoch",
+    eval_strategy="steps",
+    save_strategy="steps",
+    eval_steps=2500,          # ≈ 30 evals sur 3 epochs
+    save_steps=2500,
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
@@ -70,7 +72,7 @@ def compute_metrics(eval_pred):
 
 # Ne garder que 100000 lignes par split
 
-train_small = dataset["train"].select(range(100000))
+train_small = dataset["train"]#.select(range(100000))
 
 
 trainer = Trainer(
@@ -83,5 +85,8 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+trainer.save_model("./camembert-xnli-best")
+tokenizer.save_pretrained("./camembert-xnli-best")
 
 trainer.evaluate(dataset["test"])
