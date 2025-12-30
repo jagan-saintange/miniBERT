@@ -42,24 +42,31 @@ model = CamembertForSequenceClassification.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="./camembert-xnli",
-    eval_strategy="steps",
+    evaluation_strategy="steps",
     save_strategy="steps",
-    eval_steps=2500,
-    save_steps=2500,
+    eval_steps=2000,
+    save_steps=2000,
+
     learning_rate=1e-5,
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=16,
-    gradient_accumulation_steps=2,   # batch effectif = 32
-    num_train_epochs=3,
-    weight_decay=0.0,
-    warmup_ratio=0.06,              
-    logging_steps=100,
+    warmup_steps=7432,
+    lr_scheduler_type="polynomial",
+
+    per_device_train_batch_size=32,
+    gradient_accumulation_steps=2,
+
+    num_train_epochs=10,  # borne haute, pas objectif réel
+    max_steps=123873,
+
+    weight_decay=0.1,
+    fp16=True,
+
     load_best_model_at_end=True,
     metric_for_best_model="accuracy",
+    greater_is_better=True,
+
+    logging_steps=200,
     seed=42,
-    fp16=True
-) #Choix réalisé en cherchant les hyperparametres de RoBERTa, source : https://github.com/facebookresearch/fairseq/tree/main/examples/roberta
-#Source alternative : https://github.com/facebookresearch/fairseq/blob/main/examples/roberta/config/finetuning/mnli.yaml
+) #Choix réalisé en cherchant les hyperparametres de RoBERTa,Source : https://github.com/facebookresearch/fairseq/blob/main/examples/roberta/config/finetuning/mnli.yaml
 
 
 
