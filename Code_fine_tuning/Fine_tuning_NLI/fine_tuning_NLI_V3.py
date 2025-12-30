@@ -42,7 +42,7 @@ model = CamembertForSequenceClassification.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="./camembert-xnli",
-    evaluation_strategy="steps",
+    eval_strategy="steps",
     save_strategy="steps",
     eval_steps=2000,
     save_steps=2000,
