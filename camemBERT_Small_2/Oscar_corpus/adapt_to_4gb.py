@@ -6,6 +6,7 @@ os.chdir(r"/home/silver/Oscar")
 input_file = "corpus_utf8.txt"
 output_file = "corpus_4gb.txt"
 
+#Paramétrage pour la récupération d'un fichier plus petit
 target_size_gb = 4.1
 current_size_gb = os.path.getsize(input_file) / (1024 ** 3)
 keep_ratio = target_size_gb / current_size_gb
@@ -14,7 +15,7 @@ random.seed(42)  # reproductibilité
 
 kept_bytes = 0
 target_bytes = target_size_gb * (1024 ** 3)
-
+#Boucle pour récupérer aléatoirement des lignes jusqu'à taille de fichier atteinte
 with open(input_file, "rb") as fin, open(output_file, "wb") as fout:
     for line in fin:
         if random.random() < keep_ratio:
