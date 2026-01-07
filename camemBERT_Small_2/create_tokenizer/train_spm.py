@@ -2,7 +2,7 @@ import sentencepiece as spm
 from pathlib import Path
 
 ##ENTRAINEMENT
-CORPUS = "/home/silver/Oscar/corpus_utf8.txt"  # ou un fichier concaténé corpus_all.txt
+CORPUS = "/home/silver/Oscar/corpus_4go.txt"  # ou un fichier concaténé corpus_all.txt
 OUT_DIR = Path("models")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -18,6 +18,8 @@ spm.SentencePieceTrainer.Train(
     model_type=model_type,
     character_coverage=character_coverage,
     train_extremely_large_corpus = True,
+    input_sentence_size=5_000_000,
+    shuffle_input_sentence=True,
     hard_vocab_limit=False
 )
 
