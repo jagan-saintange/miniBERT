@@ -52,7 +52,7 @@ training_args = TrainingArguments(
     lr_scheduler_type="polynomial",
 
     per_device_train_batch_size=32,
-    gradient_accumulation_steps=2,
+    gradient_accumulation_steps=1,
 
     num_train_epochs=10,  # borne haute, pas objectif réel
     max_steps=123873,
@@ -98,3 +98,4 @@ trainer.save_model("./camembert-xnli-best")
 tokenizer.save_pretrained("./camembert-xnli-best")
 
 trainer.evaluate(dataset["test"])
+
