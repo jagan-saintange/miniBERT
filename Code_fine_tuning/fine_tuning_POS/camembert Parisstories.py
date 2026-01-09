@@ -18,7 +18,7 @@ from transformers import (
 import numpy as np
 import evaluate
 
-# 1. Chargement du dataset GSD (Universal Dependencies French)
+# 1. Chargement du dataset  (Universal Dependencies French)
 # Autorise explicitement l'utilisation du script de chargement
 from datasets import Dataset, DatasetDict
 from conllu import parse_incr
@@ -33,38 +33,38 @@ def load_conllu_to_hf(filepath):
             data_list.append({"tokens": tokens, "upos": upos})
     return Dataset.from_list(data_list)
 
-# Charger Sequoia (via le projet Universal Dependencies)
+# Charger parisstories (via le projet Universal Dependencies)
 dataset = DatasetDict({
     "train": load_conllu_to_hf("fr_parisstories-ud-train.conllu"),
     "validation": load_conllu_to_hf("fr_parisstories-ud-dev.conllu"),
     "test": load_conllu_to_hf("fr_parisstories-ud-test.conllu")
 })
 
-# 1. Liste standard des 17 étiquettes Universal POS (UPOS)
+# Liste standard des 17 étiquettes Universal POS (UPOS)
 label_list = [
     "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", 
     "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"
 ]
 
-# 2. Création des dictionnaires de correspondance
+# Création des dictionnaires de correspondance
 id2label = {i: label for i, label in enumerate(label_list)}
 label2id = {label: i for i, label in enumerate(label_list)}
 
-# 3. Fonction pour transformer les textes ("NOUN", "VERB") en chiffres (7, 15)
+# Fonction pour transformer les textes ("NOUN", "VERB") en chiffres (7, 15)
 def encode_labels(example):
     # On remplace chaque étiquette par son ID. 
     # Si une étiquette est inconnue ou vide (_), on met -100 (sera ignoré par le modèle)
     example["labels"] = [label2id.get(l, -100) for l in example["upos"]]
     return example
 
-# 4. Appliquer la conversion sur tout le dataset
+# Appliquer la conversion sur tout le dataset
 dataset = dataset.map(encode_labels)
 
-# 2. Chargement du Tokenizer (version Fast obligatoire pour l'alignement)
+#  Chargement du Tokenizer (version Fast obligatoire pour l'alignement)
 model_name = "camembert-base"
 tokenizer = CamembertTokenizerFast.from_pretrained(model_name)
 
-# 3. Fonction de prétraitement (Alignement des tokens et labels)
+#  Fonction de prétraitement (Alignement des tokens et labels)
 def tokenize_and_align_labels(examples):
     # On tokenise les textes
     tokenized_inputs = tokenizer(examples["tokens"], truncation=True, is_split_into_words=True)
@@ -98,7 +98,7 @@ def tokenize_and_align_labels(examples):
 # On relance le map (pensez à redéfinir label2id avant si nécessaire)
 tokenized_gsd = dataset.map(tokenize_and_align_labels, batched=True)
 
-# 4. Chargement du modèle pour la classification de tokens
+#  Chargement du modèle pour la classification de tokens
 model = CamembertForTokenClassification.from_pretrained(
     model_name, 
     num_labels=len(label_list),
@@ -106,7 +106,7 @@ model = CamembertForTokenClassification.from_pretrained(
     label2id=label2id
 )
 
-# 5. Métriques avec 'evaluate'
+# Métriques avec 'evaluate'
 seqeval = evaluate.load("seqeval")
 
 def compute_metrics(p):
@@ -133,10 +133,10 @@ print("Modèle et données partut prêts pour l'entraînement !")
 
 from transformers import DataCollatorForTokenClassification, TrainingArguments, Trainer
 
-# 1. Le collator s'occupe de mettre les phrases à la même longueur (padding)
+#  Le collator s'occupe de mettre les phrases à la même longueur (padding)
 data_collator = DataCollatorForTokenClassification(tokenizer)
 
-# 2. Configuration de l'entraînement
+#  Configuration de l'entraînement
 training_args = TrainingArguments(
     output_dir="./results_camembert_pos_partut",
     eval_strategy="epoch",            # Changé ici : 'eval_strategy' au lieu de 'evaluation_strategy'
@@ -156,7 +156,7 @@ training_args = TrainingArguments(
 )
 
 
-# 3. Initialisation du Trainer
+#  Initialisation du Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -170,8 +170,8 @@ import shutil
 # Supprime tous les dossiers 'checkpoint-XXX' dans le répertoire de sortie
 [shutil.rmtree(os.path.join(training_args.output_dir, d)) for d in os.listdir(training_args.output_dir) if d.startswith("checkpoint")]
 
-print("✨ Nettoyage terminé : tous les checkpoints ont été supprimés.")
-# 4. C'EST PARTI !
+print(" Nettoyage terminé : tous les checkpoints ont été supprimés.")
+#  C'EST PARTI !
 trainer.train()
 # On utilise le split 'test' qui a été tokenisé
 results = trainer.evaluate(tokenized_gsd["test"])
