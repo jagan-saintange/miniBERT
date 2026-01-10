@@ -14,7 +14,15 @@ from seqeval.metrics import f1_score, precision_score, recall_score
 import os
 import shutil
 
-##############################
+###########################
+
+
+
+PATH = ""
+
+
+
+############################
 bloc pour ne pas saturer stockage
 ###########################################
 class CheckpointPruningCallback(TrainerCallback):
@@ -55,13 +63,12 @@ class CheckpointPruningCallback(TrainerCallback):
         return control
 ###########################################
 
-
 class CamemBERTNERModel:
     def __init__(self, num_labels=7):
         print(f"[DEBUG] Initializing CamemBERTNERModel with {num_labels} labels")
         # Initialiser le modèle Camembert pour la classifiacation de tokens
         self.model = CamembertForTokenClassification.from_pretrained(
-            "/home/jagan/upload/camembert_v2_MLM_40000step",
+            PATH,
             #'camembert-base
             num_labels=num_labels # Nombre de labels de classe NER 
             #(va reconnaitre si c'est une personne, organisation, lieu etc, ici 7 classes)
@@ -71,7 +78,7 @@ class CamemBERTNERModel:
         # Configurer tokenizer
         '''print("[DEBUG] Loading tokenizer with fast tokenization...")'''
         self.tokenizer = AutoTokenizer.from_pretrained(
-            "/home/jagan/upload/camembert_v2_MLM_40000step",
+            PATH,
             #'camembert-base', # On use le modèle de camembert-base
             use_fast=True # On active fast tokenizer (méthode post camemBERT)
         )
@@ -313,4 +320,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
