@@ -14,9 +14,9 @@ from seqeval.metrics import f1_score, precision_score, recall_score
 import os
 import shutil
 
-
-
-
+##############################
+bloc pour ne pas saturer stockage
+###########################################
 class CheckpointPruningCallback(TrainerCallback):
     def __init__(self, keep_best=2, keep_last=0, metric_name="eval_f1"):
         self.keep_best = keep_best
@@ -53,7 +53,7 @@ class CheckpointPruningCallback(TrainerCallback):
                 shutil.rmtree(full_path, ignore_errors=True)
 
         return control
-
+###########################################
 
 
 class CamemBERTNERModel:
@@ -125,20 +125,22 @@ class CamemBERTNERModel:
         tokenized_dataset = dataset.map(
             tokenize_and_align_labels, 
             batched=True, # en batch
-            batch_size=32,
+            batch_size=32, # taille du batch pour la tokenisation (indépendant du batch d'entraînement)
             remove_columns=dataset.column_names 
         )
         print(f"[DEBUG] Dataset preparation complete: {len(tokenized_dataset)} samples")
         
-        return tokenized_dataset
+        return tokenized_dataset # on renvoie le dataset tokenisé + labels alignés
     
     
     def compute_metrics(self, p):
         predictions, labels = p
-        predictions = np.argmax(predictions, axis=2) # Prediction pour chaque token
+        predictions = np.argmax(predictions, axis=2) # Prediction pour chaque token, classe la plus probable
 
+        # prédiction 
         true_predictions = [
             [self.id2label[p] for (p, l) in zip(prediction, label) if l != -100] # on filtre les -100 dehors
+            # on garde uniquement les tokens réellement annotés (pas les sous-mots ignorés)
             for prediction, label in zip(predictions, labels)
         ] # iterer pour chaque prediction et label
         true_labels = [
@@ -148,7 +150,7 @@ class CamemBERTNERModel:
 
         # scores
         f1 = f1_score(true_labels, true_predictions)
-        precision = precision_score(true_labels, true_predictions)
+        precision = precision_score(true_labels, true_predictions) 
         recall = recall_score(true_labels, true_predictions)
 
         return {
@@ -166,8 +168,8 @@ class CamemBERTNERModel:
             num_train_epochs=30,
             per_device_train_batch_size=16,
             per_device_eval_batch_size=16,
-            eval_strategy="epoch",
-            save_strategy="epoch",
+            eval_strategy="epoch", # évaluation à chaque epoch
+            save_strategy="epoch", # save à chaque epoch
             learning_rate=5e-5,
             weight_decay=0,
             warmup_steps=0, # /!\ Pas de warmup comme dans l'article (maj par rapport à la version précendente)
@@ -180,6 +182,7 @@ class CamemBERTNERModel:
         print("[DEBUG] Training arguments configured")
         
         # Initialize DataCollator for token classification
+        # DataCollator padding dynamique + alignement des labels
         print("[DEBUG] Initializing DataCollatorForTokenClassification...")
         data_collator = DataCollatorForTokenClassification(self.tokenizer)
         print("[DEBUG] DataCollator initialized")
@@ -191,9 +194,9 @@ class CamemBERTNERModel:
             train_dataset=train_dataset,
             eval_dataset=val_dataset,
             tokenizer=self.tokenizer,
-            data_collator=data_collator,
-            compute_metrics=self.compute_metrics,
-            callbacks=[CheckpointPruningCallback(keep_best=2, keep_last=2)],
+            data_collator=data_collator, # collator pour gérer les labels + padding
+            compute_metrics=self.compute_metrics, # fonction de calcul des métriques seqeval
+            callbacks=[CheckpointPruningCallback(keep_best=2, keep_last=2)], #top 2, last 2
         )
         print("[DEBUG] Trainer initialized")
         
@@ -214,9 +217,8 @@ def run_grid_search(dataset, label_list):
     as described in the CamemBERT paper for NER.
     """
 
-    learning_rates = [1e-5]#, 2e-5, 3e-5, 5e-5]
-    batch_sizes = [8]#, 16, 32]
-
+    learning_rates = [1e-5]#, 2e-5, 3e-5, 5e-5] # remplir à souhait
+    batch_sizes = [8]#, 16, 32]  #ça aussi
     results = []
 
     for lr in learning_rates:
@@ -238,16 +240,16 @@ def run_grid_search(dataset, label_list):
             training_args = TrainingArguments(
                 output_dir=f'./results_lr{lr}_bs{bs}',
                 num_train_epochs=30,
-                per_device_train_batch_size=bs,
+                per_device_train_batch_size=bs, # batch size variable
                 per_device_eval_batch_size=bs,
                 eval_strategy="epoch",
                 save_strategy="epoch",
-                learning_rate=lr,
+                learning_rate=lr, # LR variable
                 weight_decay=0,
-                warmup_steps=0,
+                warmup_steps=0, # pas de warm
                 lr_scheduler_type="constant",
                 logging_steps=100,
-                load_best_model_at_end=True,
+                load_best_model_at_end=True, # recharge auto du meilleur checkpoint
                 metric_for_best_model="f1",
                 push_to_hub=False,
             )
@@ -258,8 +260,8 @@ def run_grid_search(dataset, label_list):
                 train_dataset=train_dataset,
                 eval_dataset=val_dataset,
                 tokenizer=ner_model.tokenizer,
-                callbacks=[CheckpointPruningCallback(keep_best=2, keep_last=2)],
-                data_collator=DataCollatorForTokenClassification(ner_model.tokenizer),
+                callbacks=[CheckpointPruningCallback(keep_best=2, keep_last=2)], # 2 previous checkpoints
+                data_collator=DataCollatorForTokenClassification(ner_model.tokenizer), # padding + alignement des labels
                 compute_metrics=ner_model.compute_metrics,
             )
 
@@ -298,16 +300,17 @@ def main():
     dataset = load_dataset("wikiann", "fr")
     print(f"[DEBUG] WikiANN dataset loaded successfully")
     
-    # Get label information
+    # Get label information depuis dataset
     print("[DEBUG] Extracting label information...")
     label_list = dataset["train"].features["ner_tags"].feature.names
     print(f"[DEBUG] Labels found: {label_list}")
     
     print("[DEBUG] ========== STARTING GRID SEARCH ==========")
-    run_grid_search(dataset, label_list)
+    run_grid_search(dataset, label_list) # lancement du grid search
     
     print("\n[DEBUG] ========== GRID SEARCH COMPLETE ==========")
 
 
 if __name__ == "__main__":
     main()
+
