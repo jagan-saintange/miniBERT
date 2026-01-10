@@ -46,9 +46,22 @@ On souhaite comparer :
     -train_camemBERT_MLM-Small_Vanilla.py
 
 ###Protocole pour réaliser le fine tuning NLI
--Executer le code fine_tuning_NLI.py en adaptant le path et en choisissant le modèle à entrainer
+- installer requirements_NLI.txt
+- Executer le code fine_tuning_NLI.py en adaptant le path et en choisissant le modèle à entrainer
 Les modèles possibles sont : camembert-base, et les modèles réalisé avec le protocole précédent (nom au choix)
-  
+
+###Protocole pour réaliser le fine tuning NER
+- installer RequirementsForNER.txt depuis Code_fine_tuning/fine_tuning_NER
+*First_approach_NER*
+  - Dans la classe CamemBERTNERModel changer PATH selon le modèle à utiliser (pour librairie ou local)
+  - Récupérer les meilleurs checkpoints dans le dossier dans le directory './results'm sous le nom checkpoint-{state.global_step}
+  - Pour récupérer le F1 Score, trouver le fichier trainer_state.json et la variable "best_metric"
+*First_approach_NER*
+  - Dans la classe CamemBERTNERModel changer PATH selon le modèle à utiliser (pour librairie ou local)
+  - Remplir les listes learning_rates et batch_sizes pour ajuster le grid search
+  - Récupérer les meilleur modèle dans le dossier dans le directory ./best_camembert_ner_model"
+  - les checkpoints sont aussi rangés par combinaison learning_rate/batch_size dans './results_lr{lr}_bs{bs}' sous le nom checkpoint-{state.global_step}
+  - Pour récupérer le F1 Score, trouver le fichier trainer_state.json et la variable "best_metric"
 
 ###Protocole pour lancer les code POS 
 importer dans les même répertoire que le script les 3 lignes des bases de donnée:
@@ -64,6 +77,7 @@ voici les liens pour les 4 bases de données :
 - Sequoia :      https://github.com/UniversalDependencies/UD_French-Sequoia
 - ParisStories : https://github.com/UniversalDependencies/UD_French-ParisStories
 - ParTUT :       https://github.com/UniversalDependencies/UD_French-ParTUT
+
 
 
 
