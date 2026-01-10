@@ -51,13 +51,14 @@ class KeepBestCheckpointsCallback(TrainerCallback):
         return control
 ###########################"
 
+PATH = "./camembert_v2_MLM_40000step" #CHANGER LE PATH EN FONCTION
 
 class CamemBERTNERModel:
     def __init__(self, num_labels=7):
         print(f"[DEBUG] Initializing CamemBERTNERModel with {num_labels} labels")
         # Initialize CamemBERT base model
         self.model = CamembertForTokenClassification.from_pretrained(
-            "./camembert_v2_MLM_40000step", #CHANGER LE PATH EN FONCTION
+            PATH, #CHANGER LE PATH EN FONCTION
             num_labels=num_labels
         )
         print("[DEBUG] Model loaded successfully")
@@ -65,7 +66,7 @@ class CamemBERTNERModel:
         # Configure tokenizer with fast tokenization enabled
         #print("[DEBUG] Loading tokenizer with fast tokenization...")
         self.tokenizer = AutoTokenizer.from_pretrained(
-            "./camembert_v2_MLM_40000step", #CHANGER LE PATH EN FONCTION
+            PATH, #CHANGER LE PATH EN FONCTION
             use_fast=True active le tokenizer "Fast" 
         )
         #print("[DEBUG] Tokenizer loaded successfully (fast tokenization enabled)")
@@ -250,4 +251,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
