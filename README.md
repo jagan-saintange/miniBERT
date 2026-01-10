@@ -29,9 +29,26 @@ On souhaite comparer :
 - Les résultats des différents tests réalisés.
 
 
-### 5. (Éventuellement) Ajout d'Pipeline de Génération de Texte
-Ajouter un pipeline de génération de texte **type LLM** comme GPT. Cela permettra d'explorer des capacités supplémentaires et de créer des applications variées basées sur le modèle.
+### 5. Execution du code 
+###Protocole pour lancer les codes camemBERT_Small_2 et réaliser le modèle oscar entrainé
+- Télécharger au moins 4Go de données depuis ce lien :  https://oscar-public.huma-num.fr/shuff-orig/fr/
+- Dans le bash exécuter la commande : cat fichier1 fichier2 .... fichier1 >> fichierfinal
+- Executer en adaptant les path sur chaque code:
+  -clean_corpus.py
+  -adapt_to_4GB.py
+  -remover_blank.py
+- Executer ensuite en créant modifiants les path, create_shards.py
+- Executer dans cet ordre et en adaptant les paths :
+    -train_spm.py
+    -make_tokenizer.py
+    -create_config.py
+    -init_model.py
+    -train_camemBERT_MLM-Small_Vanilla.py
 
+###Protocole pour réaliser le fine tuning NLI
+-Executer le code fine_tuning_NLI.py en adaptant le path et en choisissant le modèle à entrainer
+Les modèles possibles sont : camembert-base, et les modèles réalisé avec le protocole précédent (nom au choix)
+  
 
 ###Protocole pour lancer les code POS 
 importer dans les même répertoire que le script les 3 lignes des bases de donnée:
@@ -47,6 +64,7 @@ voici les liens pour les 4 bases de données :
 - Sequoia :      https://github.com/UniversalDependencies/UD_French-Sequoia
 - ParisStories : https://github.com/UniversalDependencies/UD_French-ParisStories
 - ParTUT :       https://github.com/UniversalDependencies/UD_French-ParTUT
+
 
 
 
