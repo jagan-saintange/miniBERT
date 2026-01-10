@@ -52,11 +52,13 @@ Les modèles possibles sont : camembert-base, et les modèles réalisé avec le 
 
 ###Protocole pour réaliser le fine tuning NER
 - installer RequirementsForNER.txt depuis Code_fine_tuning/fine_tuning_NER
-*First_approach_NER*
+
+- *First_approach_NER.py*
   - Dans la classe CamemBERTNERModel changer PATH selon le modèle à utiliser (pour librairie ou local)
   - Récupérer les meilleurs checkpoints dans le dossier dans le directory './results'm sous le nom checkpoint-{state.global_step}
   - Pour récupérer le F1 Score, trouver le fichier trainer_state.json et la variable "best_metric"
-*First_approach_NER*
+
+- *Grid_search_train_NER.py*
   - Dans la classe CamemBERTNERModel changer PATH selon le modèle à utiliser (pour librairie ou local)
   - Remplir les listes learning_rates et batch_sizes pour ajuster le grid search
   - Récupérer les meilleur modèle dans le dossier dans le directory ./best_camembert_ner_model"
@@ -77,6 +79,7 @@ voici les liens pour les 4 bases de données :
 - Sequoia :      https://github.com/UniversalDependencies/UD_French-Sequoia
 - ParisStories : https://github.com/UniversalDependencies/UD_French-ParisStories
 - ParTUT :       https://github.com/UniversalDependencies/UD_French-ParTUT
+
 
 
 
