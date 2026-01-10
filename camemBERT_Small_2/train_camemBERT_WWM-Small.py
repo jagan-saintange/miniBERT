@@ -1,4 +1,8 @@
-
+"""
+Projet de Machine Learning Avancé (MLA) - Sorbonne Université 
+Script de reproduction : Pré-entraînement CamemBERT avec Whole Word Masking (WWM) 
+Ce script implémente la logique de masquage par mot complet pour optimiser la cohérence sémantique des prédictions.
+"""
 from datasets import load_dataset
 import torch
 from transformers import (
@@ -85,7 +89,7 @@ tokenized_datasets = dataset.map(
     tokenize_function,
     batched=True,
     remove_columns=["text"],
-    num_proc=8
+    num_proc=4
 )
 
 def group_texts(examples):
