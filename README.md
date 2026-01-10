@@ -41,12 +41,13 @@ importer dans les même répertoire que le script les 3 lignes des bases de donn
 - fr_****-ud-test.conllu
 
 
-voici les lien pour les 4 bases de données : 
+voici les liens pour les 4 bases de données : 
 
 - GSD :          https://github.com/UniversalDependencies/UD_French-GSD
 - Sequoia :      https://github.com/UniversalDependencies/UD_French-Sequoia
 - ParisStories : https://github.com/UniversalDependencies/UD_French-ParisStories
 - ParTUT :       https://github.com/UniversalDependencies/UD_French-ParTUT
+
 
 
 
