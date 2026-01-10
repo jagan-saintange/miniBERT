@@ -1,0 +1,44 @@
+_____________________________________________Test camembert base pas 1 __________________________________________________________________________________
+Test gsd
+
+A faire
+Résultats sur le jeu de test : {'eval_loss': 0.08538356423377991, 'eval_precision': 0.9817820123547273, 'eval_recall': 0.9822962497381102, 'eval_f1': 0.9820390637272871, 'eval_accuracy': 0.9840271538384746, 'eval_runtime': 0.8154, 'eval_samples_per_second': 510.156, 'eval_steps_per_second': 31.885, 'epoch': 10.0}
+
+Test sequoia
+
+Résultats sur le jeu de test : {'eval_loss': 0.37526074051856995, 'eval_precision': 0.9889560325067722, 'eval_recall': 0.9905040175310446, 'eval_f1': 0.9897294197382827, 'eval_accuracy': 0.9893468737554759, 'eval_runtime': 0.8913, 'eval_samples_per_second': 511.605, 'eval_steps_per_second': 32.536, 'epoch': 20.0}
+
+Test partut
+
+Résultats sur le jeu de test : {'eval_loss': 0.8214648962020874, 'eval_precision': 0.9786814054480852, 'eval_recall': 0.9794547609640458, 'eval_f1': 0.9790679304897314, 'eval_accuracy': 0.9823280829811756, 'eval_runtime': 0.1909, 'eval_samples_per_second': 576.084, 'eval_steps_per_second': 36.66, 'epoch': 20.0}
+
+
+Test paris stories
+
+Résultats sur le jeu de test : {'eval_loss': 0.29626959562301636, 'eval_precision': 0.9796985542909874, 'eval_recall': 0.9798994974874372, 'eval_f1': 0.9797990155865464, 'eval_accuracy': 0.9825790754257907, 'eval_runtime': 1.1431, 'eval_samples_per_second': 609.743, 'eval_steps_per_second': 76.983, 'epoch': 20.0}
+
+____________________________________________Test mini_camember pas 1 ___________________________________________________________________________________________________
+
+Test paris stories
+
+Résultats sur le jeu de test : {'eval_loss': 0.09595958143472672, 'eval_precision': 0.9730090311986864, 'eval_recall': 0.9723105322531023, 'eval_f1': 0.9726596563221338, 'eval_accuracy': 0.9769343065693431, 'eval_runtime': 0.8712, 'eval_samples_per_second': 800.084, 'eval_steps_per_second': 50.507, 'epoch': 20.0}
+
+observation, les poids convergent beaucoup plus rapidement
+
+
+Test partut
+
+Résultats sur le jeu de test : {'eval_loss': 0.12110979110002518, 'eval_precision': 0.9692186266771902, 'eval_recall': 0.970367443698143, 'eval_f1': 0.9697926949654491, 'eval_accuracy': 0.974644640799078, 'eval_runtime': 0.1877, 'eval_samples_per_second': 586.077, 'eval_steps_per_second': 37.296, 'epoch': 20.0}
+
+
+Test sequoia
+Résultats sur le jeu de test : {'eval_loss': 0.07570720463991165, 'eval_precision': 0.9827640238169852, 'eval_recall': 0.9817384952520087, 'eval_f1': 0.9822509918563374, 'eval_accuracy': 0.9846674631620869, 'eval_runtime': 0.8564, 'eval_samples_per_second': 532.456, 'eval_steps_per_second': 33.862, 'epoch': 20.0}
+
+
+test gsd
+
+
+
+
+++++++++++++++++++++++++++++++++step de 0.2+++++++++++++++++++++++++
+
